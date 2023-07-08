@@ -1,0 +1,10 @@
+name: Fresurfschool-Server
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the stack
+        run: docker-compose up -d

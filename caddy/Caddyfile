@@ -1,0 +1,10 @@
+{
+  email {$EMAIL}
+  # Optional staging lets encrypt for testing. Comment out for production.
+  # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+{$DOMAIN} {
+        root * /var/www/html
+        php_fastcgi wordpress:9000
+        file_server
+}
