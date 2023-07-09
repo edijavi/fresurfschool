@@ -39,7 +39,7 @@ jobs:
         run: |
           docker build --tag $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA} .
           docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
-          docker image rm $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
+          docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
           docker image prune --force
 
   deploy_scripts:
