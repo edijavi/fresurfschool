@@ -23,7 +23,7 @@ services:
     container_name: fresurfschool-app
     restart: unless-stopped
     volumes:
-      - ./config/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./wp-config/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./wordpress:/var/www/html
     env_file:
       - .env
