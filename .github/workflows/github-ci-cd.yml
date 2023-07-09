@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches:
+      - staging
       - main
   pull_request:
     branches:
@@ -42,7 +43,8 @@ jobs:
 
   deploy_scripts:
     runs-on: self-hosted
-    needs: [login_scripts]
+    needs: [build_scripts]
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
