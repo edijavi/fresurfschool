@@ -7,7 +7,7 @@ on:
       - main
   pull_request:
     branches:
-      - '*'
+      - main
 
 env:
   APP_NAME: "fresurfschool"
@@ -44,7 +44,7 @@ jobs:
   deploy_scripts:
     runs-on: self-hosted
     needs: [build_scripts]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'refs/heads/main')
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
