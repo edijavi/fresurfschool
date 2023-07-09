@@ -11,6 +11,7 @@ on:
       - '*'
 
 env:
+  APP_NAME: "fresurfschool"
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   ENV_FILE: ${{ secrets.ENV_FILE }}
@@ -36,9 +37,9 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          docker build --tag $DOCKERHUB_USERNAME/my-image:${GITHUB_SHA} .
-          docker push $DOCKERHUB_USERNAME/my-image:${GITHUB_SHA}
-          docker image rm $DOCKERHUB_USERNAME/my-image:${GITHUB_SHA}
+          docker build --tag $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA} .
+          docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
+          docker image rm $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
           docker image prune --force
 
   deploy_scripts:
