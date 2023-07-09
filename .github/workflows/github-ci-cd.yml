@@ -1,10 +1,65 @@
-name: Fresurfschool-Server
-on: [push, workflow_dispatch]
+name: CI
+
+on:
+  push:
+    branches:
+      - development
+      - staging
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  ENV_FILE: ${{ secrets.ENV_FILE }}
+  DOCKER_COMPOSE_OVERRIDE_FILE: ${{ secrets.DOCKER_COMPOSE_OVERRIDE_FILE }}
+
 jobs:
-  build:
-    # The type of runner that the job will run on
+  login_scripts:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
-      - name: Build the stack
-        run: docker-compose up -d
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Login to Docker registry
+        run: |
+          echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
+
+  build_scripts:
+    runs-on: self-hosted
+    needs: [login_scripts]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build and push Docker image
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          docker build --tag $DOCKERHUB_USERNAME/my-image:${GITHUB_SHA} .
+          docker push $DOCKERHUB_USERNAME/my-image:${GITHUB_SHA}
+          docker image rm $DOCKERHUB_USERNAME/my-image:${GITHUB_SHA}
+          docker image prune --force
+
+  deploy_scripts:
+    runs-on: self-hosted
+    needs: [login_scripts]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set environment variables
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+      - name: Deploy
+        env:
+          APP_NAME: 'fresurfschool'
+        run: |
+          cp -f $DOCKER_COMPOSE_OVERRIDE_FILE docker-compose.yml
+          docker-compose pull --quiet
+          docker-compose --project-name "$APP_NAME" up -d --no-build --force-recreate --remove-orphans wordpress
+          docker-compose --project-name "$APP_NAME" images
+          docker-compose --project-name "$APP_NAME" ps
+          sleep 20
+          docker-compose --project-name "$APP_NAME" logs --timestamps --tail="all" --no-color > startup.log
+          docker image prune --force
