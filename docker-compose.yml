@@ -25,7 +25,7 @@ services:
     volumes:
       - ./config/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - wordpress:/var/www/html
-      - wordpress_data:/var/www/html/wp-content
+      - ./wordpress_data:/var/www/html/wp-content
     env_file:
       - .env
 
@@ -50,7 +50,6 @@ volumes:
   caddy_data:
   caddy_config:
   wordpress:
-  wordpress_data:
 
 networks:
   default:
