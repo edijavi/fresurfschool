@@ -1,4 +1,4 @@
-FROM wordpress:php8.1-fpm-alpine
+FROM edijavi/fresurfschool:base
 
 # Copy theme customizations
 COPY ./wordpress /var/www/html
