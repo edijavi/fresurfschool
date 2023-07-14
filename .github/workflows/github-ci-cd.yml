@@ -37,6 +37,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
         run: |
           echo pwd
+          pwd
           docker build --tag $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA} .
           docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
           docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
