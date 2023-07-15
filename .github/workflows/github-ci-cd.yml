@@ -49,7 +49,7 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          if [ -d "./Dockerfile" ]; then
+          if [ -d "Dockerfile" ]; then
             docker build --tag $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA} .
             docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
             docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
