@@ -20,6 +20,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout code
+        run: sudo -s
         uses: actions/checkout@v2
       - name: Login to Docker registry
         run: |
