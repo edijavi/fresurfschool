@@ -15,6 +15,10 @@ env:
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   ENV_FILE: ${{ secrets.ENV_FILE }}
 
+permissions:
+  contents: write  # To push a branch 
+  pull-requests: write  # To create a PR from that branch
+
 jobs:
   bkp_scripts:
     runs-on: self-hosted
@@ -58,14 +62,8 @@ jobs:
           pwd
           sudo -s
           pwd
-      - name: Configure git
-        run: git config --global --add safe.directory /home/edijavi/actions-runner/_work/fresurfschool/fresurfschool
       - name: Checkout code
         uses: actions/checkout@v3
-  
-          
-      - name: Checkout code
-        uses: actions/checkout@v2
 
   deploy_scripts:
     runs-on: self-hosted
