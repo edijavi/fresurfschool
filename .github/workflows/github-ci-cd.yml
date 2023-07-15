@@ -19,8 +19,8 @@ jobs:
   login_scripts:
     runs-on: self-hosted
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # - name: Checkout code
+      #   uses: actions/checkout@v2
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
@@ -29,15 +29,15 @@ jobs:
     runs-on: self-hosted
     needs: [login_scripts]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # - name: Checkout code
+      #   uses: actions/checkout@v2
       - name: Build and push Docker image
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          echo pwd
           pwd
+          sudo cp -r ./wordpress/wp-content ~/actions-runner/_work/fresurfschool/bkp/
           docker build --tag $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA} .
           docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
           docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
@@ -50,6 +50,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - name: Set environment variables
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
@@ -65,3 +67,6 @@ jobs:
           sleep 20
           docker-compose --project-name "$APP_NAME" logs --timestamps --tail="all" --no-color > startup.log
           docker image prune --force
+      - name: Copy folder back to volume mount
+        run: |
+          sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
