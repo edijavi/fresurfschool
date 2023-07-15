@@ -60,6 +60,11 @@ jobs:
     needs: [build_scripts]
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Sparse checkout
+        run: |
+          git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml wordpress/
       - name: Set environment variables
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
