@@ -95,7 +95,7 @@ jobs:
       - name: Backup adding
         run: |
           pwd
-          sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
+          sudo -s cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
           docker-compose exec -it wordpress bash
           chown -R www-data:www-data /var/www/html/wp-content
           echo "Happy day"
