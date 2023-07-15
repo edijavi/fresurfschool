@@ -35,6 +35,16 @@ jobs:
     runs-on: self-hosted
     needs: [bkp_scripts]
     steps:
+      - name: Sparse checkout
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            caddy/
+            config/
+            deploy/
+            docker-compose.yml
+            Dockerfile
+          sparse-checkout-cone-mode: false
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
@@ -52,8 +62,6 @@ jobs:
             docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
             docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
             docker image prune --force
-      - name: Checkout code
-        uses: actions/checkout@v3
 
   deploy_scripts:
     runs-on: self-hosted
