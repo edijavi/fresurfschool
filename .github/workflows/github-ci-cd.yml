@@ -20,10 +20,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout code
-        run: |
-          pwd
-          sudo -s
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+          with:
+            sparse-checkout: .
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
