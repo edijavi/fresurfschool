@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Sparse checkout
         run: |
-          git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml wordpress/
+          git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Sparse checkout
         run: |
-          git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml wordpress/
+          git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml
       - name: Set environment variables
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
