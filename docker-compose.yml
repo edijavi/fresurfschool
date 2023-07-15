@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./config/php.ini:/usr/local/etc/php/conf.d/custom.ini:rw
-      - ./wordpress:/var/www/html:rw
+      - ./wordpress:/var/www/html:rw,Z
     env_file:
       - .env
 
@@ -36,8 +36,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./wordpress:/var/www/html:rw
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./wordpress:/var/www/html:rw,Z
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:rw
       - caddy_data:/data
       - caddy_config:/config
     restart: unless-stopped
