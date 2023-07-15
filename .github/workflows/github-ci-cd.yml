@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Delete content
         run: |
-          sodo -s rm -rf *
+          sudo -s rm -rf *
       - name: Checkout
         uses: actions/checkout@v2
       - name: Sparse checkout
