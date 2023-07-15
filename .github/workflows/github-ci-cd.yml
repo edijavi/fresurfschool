@@ -32,8 +32,8 @@ jobs:
     runs-on: self-hosted
     needs: [bkp_scripts]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    #   - name: Checkout code
+    #     uses: actions/checkout@v2
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
@@ -42,8 +42,8 @@ jobs:
     runs-on: self-hosted
     needs: [login_scripts]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # - name: Checkout code
+      #   uses: actions/checkout@v2
       - name: Build and push Docker image
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -77,12 +77,11 @@ jobs:
           docker-compose --project-name "$APP_NAME" logs --timestamps --tail="all" --no-color > startup.log
           docker image prune --force
       
-  bkp_adding:
-    runs-on: self-hosted
-    needs: [deploy_scripts]
-    steps:
-      - name: Backup adding
-        run: |
-          pwd
-          sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
-  
+  # bkp_adding:
+  #   runs-on: self-hosted
+  #   needs: [deploy_scripts]
+  #   steps:
+  #     - name: Backup adding
+  #       run: |
+  #         pwd
+  #         sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
