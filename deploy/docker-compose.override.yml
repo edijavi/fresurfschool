@@ -18,7 +18,8 @@ services:
     depends_on:
       - db
       - caddy
-    image: $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
+    # image: $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
+    image: wordpress:php8.1-fpm-alpine
     container_name: fresurfschool-app
     restart: unless-stopped
     volumes:

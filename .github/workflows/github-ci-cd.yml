@@ -32,8 +32,6 @@ jobs:
     runs-on: self-hosted
     needs: [bkp_scripts]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
@@ -42,27 +40,32 @@ jobs:
     runs-on: self-hosted
     needs: [login_scripts]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Build and push Docker image
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          docker build --tag $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA} .
-          docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
-          docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
-          docker image prune --force
+          if [ -d "./Dockerfile" ]; then
+            docker build --tag $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA} .
+            docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
+            docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
+            docker image prune --force
+          else
+            echo "Docker File does not exist."
+          fi
+      - name: Delete folder
+        run: |
+          pwd
+          sudo -s rm -r ~/actions-runner/_work/fresurfschool/fresurfschool
+          pwd
+      - name: Checkout code
+        uses: actions/checkout@v2
 
   deploy_scripts:
     runs-on: self-hosted
     needs: [build_scripts]
     if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'refs/heads/main')
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
       - name: Set environment variables
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
@@ -79,11 +82,11 @@ jobs:
           docker-compose --project-name "$APP_NAME" logs --timestamps --tail="all" --no-color > startup.log
           docker image prune --force
       
-  # bkp_adding:
-  #   runs-on: self-hosted
-  #   needs: [deploy_scripts]
-  #   steps:
-  #     - name: Backup adding
-  #       run: |
-  #         pwd
-  #         sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
+  bkp_adding:
+    runs-on: self-hosted
+    needs: [deploy_scripts]
+    steps:
+      - name: Backup adding
+        run: |
+          pwd
+          sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
