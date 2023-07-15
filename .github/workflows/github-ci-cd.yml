@@ -14,27 +14,27 @@ env:
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   ENV_FILE: ${{ secrets.ENV_FILE }}
 
-permissions:
-  contents: write  # To push a branch 
-  pull-requests: write  # To create a PR from that branch
-
 jobs:
-  bkp_scripts:
-    runs-on: self-hosted
-    steps:
-      - name: Backup
-        run: |
-          if [ -d "./wordpress/wp-content" ]; then
-            pwd
-            sudo cp -r ./wordpress/wp-content ~/actions-runner/_work/fresurfschool/bkp/
-          else
-            echo "Folder does not exist."
-          fi
+  # bkp_scripts:
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Backup
+  #       run: |
+  #         if [ -d "./wordpress/wp-content" ]; then
+  #           pwd
+  #           sudo cp -r ./wordpress/wp-content ~/actions-runner/_work/fresurfschool/bkp/
+  #         else
+  #           echo "Folder does not exist."
+  #         fi
 
   login_scripts:
     runs-on: self-hosted
-    needs: [bkp_scripts]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Sparse checkout
+        run: |
+          git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml wordpress/
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
@@ -52,8 +52,6 @@ jobs:
             docker push $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
             docker image rm --force $DOCKERHUB_USERNAME/$APP_NAME:${GITHUB_SHA}
             docker image prune --force
-      - name: Checkout code
-        uses: actions/checkout@v3
 
   deploy_scripts:
     runs-on: self-hosted
@@ -76,11 +74,11 @@ jobs:
           docker-compose --project-name "$APP_NAME" logs --timestamps --tail="all" --no-color > startup.log
           docker image prune --force
       
-  bkp_adding:
-    runs-on: self-hosted
-    needs: [deploy_scripts]
-    steps:
-      - name: Backup adding
-        run: |
-          pwd
-          sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
+  # bkp_adding:
+  #   runs-on: self-hosted
+  #   needs: [deploy_scripts]
+  #   steps:
+  #     - name: Backup adding
+  #       run: |
+  #         pwd
+  #         sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
