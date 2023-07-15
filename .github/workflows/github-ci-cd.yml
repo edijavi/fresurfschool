@@ -31,9 +31,13 @@ jobs:
     steps:
       - name: Backup
         run: |
+          if [ -d "./wordpress/wp-content" ]; then
           pwd
-          sudo cp -r ./wordpress/wp-content ~/actions-runner/_work/fresurfschool/bkp/  
-  
+          sudo cp -r ./wordpress/wp-content ~/actions-runner/_work/fresurfschool/bkp/
+        else
+          echo "Folder does not exist."
+        fi
+
   build_scripts:
     runs-on: self-hosted
     needs: [login_scripts]
