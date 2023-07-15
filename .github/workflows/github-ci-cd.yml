@@ -16,15 +16,6 @@ env:
   ENV_FILE: ${{ secrets.ENV_FILE }}
 
 jobs:
-  login_scripts:
-    runs-on: self-hosted
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Login to Docker registry
-        run: |
-          echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
-  
   bkp_scripts:
     runs-on: self-hosted
     steps:
@@ -36,6 +27,16 @@ jobs:
           else
             echo "Folder does not exist."
           fi
+
+  login_scripts:
+    runs-on: self-hosted
+    needs: [bkp_scripts]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Login to Docker registry
+        run: |
+          echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
 
   build_scripts:
     runs-on: self-hosted
