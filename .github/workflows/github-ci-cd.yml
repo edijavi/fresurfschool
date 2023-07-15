@@ -56,7 +56,7 @@ jobs:
       - name: Delete folder
         run: |
           pwd
-          sudo -s rm -r ~/actions-runner/_work/fresurfschool/fresurfschool
+          sudo -s
           pwd
       - name: Checkout code
         uses: actions/checkout@v2
