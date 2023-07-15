@@ -17,20 +17,21 @@ env:
   ENV_FILE: ${{ secrets.ENV_FILE }}
 
 jobs:
-  # bkp_scripts:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Backup
-  #       run: |
-  #         if [ -d "./wordpress/wp-content" ]; then
-  #           pwd
-  #           sudo cp -r ./wordpress/wp-content ~/actions-runner/_work/fresurfschool/bkp/
-  #         else
-  #           echo "Folder does not exist."
-  #         fi
+  bkp_scripts:
+    runs-on: self-hosted
+    steps:
+      - name: Backup
+        run: |
+          if [ -d "./wordpress/wp-content" ]; then
+            pwd
+            sudo cp -r ./wordpress/wp-content ~/actions-runner/_work/fresurfschool/bkp/
+          else
+            echo "Folder does not exist."
+          fi
 
   login_scripts:
     runs-on: self-hosted
+    needs: [bkp_scripts]
     steps:
       # - name: Delete content
       #   run: |
@@ -87,11 +88,11 @@ jobs:
           docker-compose --project-name "$APP_NAME" logs --timestamps --tail="all" --no-color > startup.log
           docker image prune --force
       
-  # bkp_adding:
-  #   runs-on: self-hosted
-  #   needs: [deploy_scripts]
-  #   steps:
-  #     - name: Backup adding
-  #       run: |
-  #         pwd
-  #         sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
+  bkp_adding:
+    runs-on: self-hosted
+    needs: [deploy_scripts]
+    steps:
+      - name: Backup adding
+        run: |
+          pwd
+          sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
