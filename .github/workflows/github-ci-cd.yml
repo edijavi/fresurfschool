@@ -57,11 +57,6 @@ jobs:
           else
             echo "Docker File does not exist."
           fi
-      - name: Delete folder
-        run: |
-          pwd
-          sudo -s
-          pwd
       - name: Checkout code
         uses: actions/checkout@v3
 
