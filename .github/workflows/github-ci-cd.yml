@@ -15,6 +15,10 @@ env:
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   ENV_FILE: ${{ secrets.ENV_FILE }}
 
+permissions:
+  contents: write  # To push a branch 
+  pull-requests: write  # To create a PR from that branch
+
 jobs:
   bkp_scripts:
     runs-on: self-hosted
@@ -59,7 +63,7 @@ jobs:
           sudo -s
           pwd
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
   deploy_scripts:
     runs-on: self-hosted
