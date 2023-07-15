@@ -21,8 +21,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-          with:
-            sparse-checkout: .
+        with:
+          sparse-checkout: .
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
