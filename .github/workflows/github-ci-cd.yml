@@ -76,10 +76,7 @@ jobs:
           sleep 20
           docker-compose --project-name "$APP_NAME" logs --timestamps --tail="all" --no-color > startup.log
           docker image prune --force
-      - name: Copy folder back to volume mount
-        run: |
-          sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
-    
+      
   bkp_adding:
     runs-on: self-hosted
     needs: [deploy_scripts]
