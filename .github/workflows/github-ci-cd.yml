@@ -31,7 +31,7 @@ jobs:
   login_scripts:
     runs-on: self-hosted
     needs: [bkp_scripts]
-    # steps:
+    steps:
     #   - name: Checkout code
     #     uses: actions/checkout@v2
       - name: Login to Docker registry
@@ -85,4 +85,3 @@ jobs:
   #       run: |
   #         pwd
   #         sudo cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
-  
