@@ -32,14 +32,14 @@ jobs:
   login_scripts:
     runs-on: self-hosted
     steps:
-      - name: Delete content
-        run: |
-          sudo -s rm -rf *
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Sparse checkout
-        run: |
-          git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml wordpress/
+      # - name: Delete content
+      #   run: |
+      #     sudo -s rm -rf *
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      # - name: Sparse checkout
+      #   run: |
+      #     git sparse-checkout set caddy/ config/ deploy/ Dockerfile docker-compose.yml wordpress/
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
