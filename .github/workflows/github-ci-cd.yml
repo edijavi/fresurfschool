@@ -58,6 +58,12 @@ jobs:
           pwd
           sudo -s
           pwd
+      - name: Configure git
+        run: git config --global --add safe.directory /home/edijavi/actions-runner/_work/fresurfschool/fresurfschool
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+          
       - name: Checkout code
         uses: actions/checkout@v2
 
