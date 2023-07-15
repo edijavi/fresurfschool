@@ -6,4 +6,4 @@ COPY ./wordpress /var/www/html
 # Copy configuration files
 COPY ./config/php.ini /usr/local/etc/php/conf.d/custom.ini
 
-RUN chmod 666 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
