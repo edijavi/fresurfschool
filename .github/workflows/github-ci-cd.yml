@@ -97,5 +97,6 @@ jobs:
           pwd
           sudo -s cp -r ~/actions-runner/_work/fresurfschool/bkp/wp-content ./wordpress/
           docker-compose exec -it wordpress bash
+          pwd
           chown -R www-data:www-data /var/www/html/wp-content
           echo "Happy day"
