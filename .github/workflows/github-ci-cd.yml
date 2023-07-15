@@ -35,16 +35,14 @@ jobs:
     runs-on: self-hosted
     needs: [bkp_scripts]
     steps:
-      - name: Sparse checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           sparse-checkout: |
             caddy/
             config/
             deploy/
-            docker-compose.yml
             Dockerfile
-          sparse-checkout-cone-mode: false
+            docker-compose.yml
       - name: Login to Docker registry
         run: |
           echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
