@@ -27,7 +27,6 @@ jobs:
   
   bkp_scripts:
     runs-on: self-hosted
-    if: ./wordpress/wp-content
     steps:
       - name: Backup
         run: |
