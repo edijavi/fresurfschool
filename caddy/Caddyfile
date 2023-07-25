@@ -8,7 +8,7 @@ www.{$DOMAIN_ES}, www.{$DOMAIN_COM} {
 	  redir https://{labels.1}.{labels.0}{uri}
 }
 
-{$DOMAIN} {
+{$DOMAIN_ES}, {$DOMAIN_COM} {
     tls internal
     root * /var/www/html
     php_fastcgi wordpress:9000
