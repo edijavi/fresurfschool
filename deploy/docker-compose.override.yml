@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./config/php.ini:/usr/local/etc/php/conf.d/custom.ini:rw
-      - ./wordpress:/var/www/html:rw,Z
+      - ./wordpress:/var/www/html:rw,z
     env_file:
       - .env
 
@@ -32,10 +32,11 @@ services:
     image: caddy:alpine
     container_name: fresurfschool-webserver
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
     volumes:
-      - ./wordpress:/var/www/html:rw,Z
+      - ./wordpress:/var/www/html:rw,z
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:rw
       - caddy_data:/data
       - caddy_config:/config
@@ -46,6 +47,7 @@ services:
 volumes:
   db_data:
   caddy_data:
+    external: true
   caddy_config:
 
 networks:
