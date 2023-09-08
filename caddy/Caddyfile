@@ -13,4 +13,16 @@ www.{$DOMAIN_ES}, www.{$DOMAIN_COM} {
     root * /var/www/html
     php_fastcgi wordpress:9000
     file_server
+
+    # Configure HSTS (HTTP Strict Transport Security)
+    header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Turn off browser content sniffing
+    header X-Content-Type-Options "nosniff"
+
+    # Protect against clickjacking attacks
+    header X-Frame-Options "DENY"
+
+    # Protect against XSS attacks by enabling browser XSS safeguards
+    header X-XSS-Protection "1; mode=block"
 }
